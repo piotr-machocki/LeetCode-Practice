@@ -1,6 +1,9 @@
 class Solution:
     def isValid(self, s: str) -> bool:
         
+        if len(s) % 2 == 1:
+            return False
+
         paren = 0
         curly = 0
         square = 0
