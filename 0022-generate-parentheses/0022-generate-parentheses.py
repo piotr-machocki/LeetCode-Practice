@@ -9,6 +9,7 @@ class Solution:
             
             if open_count + close_count == n*2:
                 ans.append(current_str)
+                return
 
             if open_count < n:
                 backtrack(current_str + "(", open_count+1, close_count)
