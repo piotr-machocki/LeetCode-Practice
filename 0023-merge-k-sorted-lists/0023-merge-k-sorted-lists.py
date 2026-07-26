@@ -3,30 +3,35 @@
 #     def __init__(self, val=0, next=None):
 #         self.val = val
 #         self.next = next
+
+
 class Solution:
     def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
-        
+
         dummy = ListNode()
         curr = dummy
 
-        # Filter out those sneaky empty linked lists (None's)
+        import heapq
         
-        lists = [node for node in lists if node]
+        pq = []
 
-        while True:
+        for i in range(len(lists)):
+            if lists[i]:
+                heapq.heappush(pq, (lists[i].val, i, lists[i]))
 
-            smallest_idx = -1
-            
-            for i in range(len(lists)):
-                if lists[i] is not None:
-                    if smallest_idx == -1 or lists[i].val < lists[smallest_idx].val:
-                        smallest_idx = i
-                        
-            if smallest_idx == -1:
-                break
-            else:
-                curr.next = lists[smallest_idx]
-                curr = curr.next
-                lists[smallest_idx] = lists[smallest_idx].next
-        
+        while pq:
+            x = heapq.heappop(pq)
+
+            if x[2].next:
+                heapq.heappush(pq, (x[2].next.val ,x[1], x[2].next))
+
+            curr.next = x[2]
+            curr = curr.next
+
         return dummy.next
+
+
+
+
+
+
