@@ -3,35 +3,44 @@
 #     def __init__(self, val=0, next=None):
 #         self.val = val
 #         self.next = next
-
-
 class Solution:
     def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
-
-        dummy = ListNode()
-        curr = dummy
-
-        import heapq
         
-        pq = []
 
-        for i in range(len(lists)):
-            if lists[i]:
-                heapq.heappush(pq, (lists[i].val, i, lists[i]))
+        def mergeTwoLists(l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
 
-        while pq:
-            x = heapq.heappop(pq)
+            dummy = ListNode()
+            tail = dummy
+            
+            while l1 and l2:
+                if l1.val < l2.val:
+                    tail.next = l1
+                    l1 = l1.next
+                else:
+                    tail.next = l2
+                    l2 = l2.next
+                tail = tail.next
+                
+            # Attach whichever list still has remaining nodes
+            tail.next = l1 if l1 else l2
 
-            if x[2].next:
-                heapq.heappush(pq, (x[2].next.val ,x[1], x[2].next))
+            return dummy.next
 
-            curr.next = x[2]
-            curr = curr.next
+        if lists:
 
-        return dummy.next
+            while len(lists) != 1:
+                
+                merged_lists = []
 
+                for i in range(0,len(lists), 2):
+                    if i+1 < len(lists):
+                        merged_lists.append(mergeTwoLists(lists[i], lists[i+1]))
+                    else:
+                        merged_lists.append(lists[i])
+                        
+                lists = merged_lists
 
+            return lists[0]
 
-
-
-
+        else:
+            return None
