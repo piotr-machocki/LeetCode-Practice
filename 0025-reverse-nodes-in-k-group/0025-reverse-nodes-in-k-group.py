@@ -5,61 +5,62 @@
 #         self.next = next
 class Solution:
     def reverseKGroup(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
-        
-        if k == 1:
+
+        if k == 1 or not head:
             return head
 
         dummy = ListNode()
         L = dummy
-        start = ListNode(next=head)
+        L_holder = None
         prev = None
         last = None
-        P = None
-        next_start = ListNode()
+        start = ListNode(next=head)
+        check = start.next
+        first = True
 
-        def revGroup(iter):
+        def revK():
+            nonlocal L, L_holder, prev, start, check, first
 
-            nonlocal L, start, prev, last, P, next_start
-
-            if iter == 1:
-                L.next = P
-                L = prev
-
-                if next_start.next:
-                    start = ListNode(next=next_start.next)   
-                    revGroup(k)
-                return
-
-            st = start.next
-
-            for _ in range(iter-1):
-
-                if st and st.next:
-                    prev = st
-                    last = prev.next
+            for _ in range(k-1):
+                if check.next:
+                    check = check.next
                 else:
                     L.next = start.next
                     return
 
-                st = st.next
-            
-            ln = last.next
+            check = check.next
 
-            prev.next = None
-            last.next = prev
+            st = start.next
+            prev = st
+            last = prev.next
+            L_holder = prev
 
-            if iter == k:
+            for i in range(k-1):
 
-                P = last
+                another = last.next
 
-                if ln:
-                    next_start.next = ln
+                if first:
+                    prev.next = None
+                    last.next = prev
+                    first = False
                 else:
-                    L.next = last
-                    next_start.next = None
+                    last.next = prev
+                
+                prev = last
+                P = prev
+                last = another
             
-            revGroup(iter-1)
+            first = True
 
-        revGroup(k)
-
-        return dummy.next
+            if not check:
+                L.next = P 
+                return
+            else:
+                L.next = P
+                L = L_holder
+                start.next = another
+                revK()
+                return
+        
+        revK()
+        return dummy.next    
