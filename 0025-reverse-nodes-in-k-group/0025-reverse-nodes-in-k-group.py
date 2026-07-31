@@ -8,7 +8,7 @@ class Solution:
 
         if k == 1 or not head:
             return head
-
+        
         dummy = ListNode()
         L = dummy
         L_holder = None
@@ -18,26 +18,24 @@ class Solution:
         check = start.next
         first = True
 
-        def revK():
-            nonlocal L, L_holder, prev, start, check, first
+        while check:
 
             for _ in range(k-1):
                 if check.next:
                     check = check.next
                 else:
                     L.next = start.next
-                    return
-
-            check = check.next
-
-            st = start.next
-            prev = st
+                    return dummy.next
+            
+            check = check.next 
+            
+            prev = start.next
             last = prev.next
             L_holder = prev
 
             for i in range(k-1):
 
-                another = last.next
+                another = last.next 
 
                 if first:
                     prev.next = None
@@ -49,18 +47,14 @@ class Solution:
                 prev = last
                 P = prev
                 last = another
-            
-            first = True
-
-            if not check:
-                L.next = P 
-                return
-            else:
-                L.next = P
-                L = L_holder
-                start.next = another
-                revK()
-                return
+                               
+            L.next = P
+            L = L_holder
+            start.next = check
         
-        revK()
-        return dummy.next    
+        L.next = None
+        return dummy.next   
+
+
+
+  
