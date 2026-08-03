@@ -2,6 +2,7 @@ class Solution:
     def strStr(self, haystack: str, needle: str) -> int:
 
         j = 0
+        i = 0
         
         for i in range(len(haystack)):
 
