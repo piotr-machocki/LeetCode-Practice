@@ -1,28 +1,17 @@
 class Solution:
     def strStr(self, haystack: str, needle: str) -> int:
-
-        j = 0
-        i = 0
-        last_first = 0
         
-        while i < len(haystack):
+        j = 0
 
-            while j < len(needle) and i < len(haystack) and haystack[i] == needle[j]:
-                i += 1
+        for i in range(len(haystack)):
+            
+            while i < len(haystack) and j < len(needle) and haystack[i] == needle[j]:
                 j += 1
-
-                if i < len(haystack) and not last_first and haystack[i] == needle[0]:
-                    last_first = i
-
+                i += 1
             
             if j == len(needle):
-                return i - len(needle)
-            elif j == 0:
-                i += 1
+                return i - j
             else:
-                if last_first:
-                    i = last_first
-                    last_first = 0
-            j = 0
+                j = 0
 
-        return -1 
+        return -1
