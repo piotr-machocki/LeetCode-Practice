@@ -1,44 +1,36 @@
 class Solution:
     def divide(self, dividend: int, divisor: int) -> int:
 
-        divisions = 0
-        positive = True
-
-        if dividend < 0 and divisor < 0:
-            dividend = -dividend
-            divisor = -divisor
-        elif dividend < 0:
-            dividend = -dividend
-            positive = False
-        elif divisor < 0:
-            divisor = -divisor
-            positive = False
+        negative = (dividend < 0) != (divisor < 0)
         
-        while True:
-            k = 0
-            while (divisor << k) <= dividend:
-                k +=1
+        dividend = abs(dividend)
+        divisor = abs(divisor)
+
+        quotient = 0
+        multiple = 1
+        
+        while (divisor << 1) <= dividend:
+            divisor <<= 1
+            multiple <<= 1
+        
+        while multiple:
+            if divisor <= dividend:
+                dividend -= divisor
+                quotient += multiple
+
+            divisor >>= 1
+            multiple >>= 1
+        
+        if negative:
+            quotient = -quotient
             
-            if k:
-                divisions +=  1 << k-1
-                dividend -= (divisor << k-1)
-            else:
-                break
-                # handle the case where dividend == divisor and divisor > dividend
+        if quotient > (1 << 31) - 1:
+            return (1 << 31) - 1
 
-        while not ((dividend - divisor) < 0):
-            dividend -= divisor
-            divisions += 1
-        
-        if positive:
-            if divisions > (1 << 31) - 1:
-                return (1 << 31) - 1
-            else:
-                return divisions
+        elif quotient < -(1 << 31):
+            return -(1 << 31)
+
         else:
-            if -divisions < -(1 << 31):
-                return -(1 << 31)
-            else:
-                return -divisions
+            return quotient
         
        
