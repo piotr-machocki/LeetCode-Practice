@@ -1,66 +1,76 @@
 class Solution:
     def findSubstring(self, s: str, words: List[str]) -> List[int]:
+
+        word_target = {}
+        word_count = {}
+        sol = []
+        
+        for i in range(len(words)):
+
+            if words[i] in word_target:
+                word_target[words[i]] += 1
+            else:
+                word_target[words[i]] = 1
         
         word_len = len(words[0])
-        target_count = {}
-        sol = []
-
-        # Runtime: O(len(words))    
-        # Memory: O(len(words))
-
-        for i in range(len(words)):
-            if words[i] not in target_count:
-                target_count[words[i]] = 1
-            else:
-                target_count[words[i]] += 1
-
-        seen_count = {}
-
-        L = 0
-        P = len(words) * word_len
         i = 0
+        target = 0
 
-        while P <= len(s):
+        while i < word_len:
 
-            edge = L+i+word_len
+            L = i
+            P = L + word_len
 
-            if edge <= P:
+            while P <= len(s):
 
-                candidate = s[L+i:edge]
+                candidate = s[P-word_len:P]
 
-                if candidate in target_count:
-                    if candidate in seen_count:
-                        seen_count[candidate] += 1
+                if candidate in word_target:
+                    if candidate in word_count:
+                        word_count[candidate] += 1
                     else:
-                        seen_count[candidate] = 1
-                    i += word_len
+                        word_count[candidate] = 1
+
+                    if not (word_count[candidate] > word_target[candidate]):
+                        target += 1
+
+                    while word_count[candidate] > word_target[candidate]:
+
+                        word_drop = s[L:L+word_len]
+                        word_count[word_drop] -= 1
+
+                        if word_count[word_drop] < word_target[word_drop]:
+                            target -= 1
+                        
+                        if word_count[word_drop] == 0:
+                            del word_count[word_drop]
+                        
+                        L += word_len
+
+                    if target == len(words):
+
+                        sol.append(P - len(words)*word_len)
+
+                        word_drop = s[L:L+word_len]
+
+                        if word_count[word_drop] == 1:
+                            del word_count[word_drop]
+                        else:
+                            word_count[word_drop] -= 1
+                        
+                        target -= 1
+                        L += word_len
+                
+                    P += word_len     
+
                 else:
-                    L += 1
-                    P += 1
-                    i = 0
-                    seen_count = {}
-            else:
-                count = True
+                    L = P 
+                    P += word_len
+                    word_count = {}
+                    target = 0
 
-                for item in seen_count.items():
-
-                    if target_count[item[0]] == item[1]:
-                        continue
-                    else:
-                        count = False
-                        break
-
-                
-                if count:
-                    sol.append(P - (len(words) * word_len))
-                
-                L += 1
-                P += 1
-                i = 0
-                seen_count = {}
-
-        return sol       
-
-
+            i += 1
+            word_count = {}
+            target = 0
         
-
+        return sol
