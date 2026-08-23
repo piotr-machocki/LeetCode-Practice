@@ -17,8 +17,7 @@ class Solution:
                 left = 0
                 right = 0
         
-        left = 0
-        right = 0
+        left = right = 0
 
         for i in range(len(s) - 1, -1, -1):
 
