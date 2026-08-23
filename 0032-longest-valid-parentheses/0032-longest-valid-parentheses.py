@@ -19,9 +19,9 @@ class Solution:
         
         left = right = 0
 
-        for i in range(len(s) - 1, -1, -1):
+        for char in reversed(s):
 
-            if s[i] == "(":
+            if char == "(":
                 left += 1
             else:
                 right += 1
