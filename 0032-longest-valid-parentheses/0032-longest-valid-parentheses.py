@@ -5,9 +5,9 @@ class Solution:
         right = 0
         max_len = 0
         
-        for i in range(len(s)):
+        for char in s:
 
-            if s[i] == "(":
+            if char == "(":
                 left += 1
             else:
                 right += 1
