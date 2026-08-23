@@ -1,9 +1,7 @@
 class Solution:
     def longestValidParentheses(self, s: str) -> int:
 
-        left = 0
-        right = 0
-        max_len = 0
+        left = right = max_len = 0
         
         for char in s:
 
