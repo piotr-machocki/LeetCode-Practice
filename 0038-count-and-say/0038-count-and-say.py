@@ -19,7 +19,6 @@ class Solution:
                 
                 ans_next.append(str(num_count))
                 ans_next.append(num)
-                num_count = 0
             
             ans = ans_next
             ans_next = []
